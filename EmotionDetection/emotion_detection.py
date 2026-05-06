@@ -38,7 +38,7 @@ def emotion_detector(text_to_analyze):
         timeout=10
     )
 
-    if response.status_code != 200:
+    if response.status_code == 400:
         return {
         'anger': None,
         'disgust': None,
