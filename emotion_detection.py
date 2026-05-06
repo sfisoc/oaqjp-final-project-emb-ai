@@ -38,21 +38,33 @@ def emotion_detector(text_to_analyze):
         timeout=10
     )
 
-    return response.text
+    if response.status_code != 200:
+        return {
+        'anger': None,
+        'disgust': None,
+        'fear': None,
+        'joy': None,
+        'sadness': None,
+        'dominant_emotion': None
+        }
 
-    # print(response)
+    formated_response = response.json()
 
-    # if response.status_code != 200:
-    #     return {'label': None, 'score': None}
+    emotions = formated_response['emotionPredictions'][0]['emotion']
 
-    # formatted_response = response.json()
-    # document_sentiment = formatted_response.get('documentSentiment')
+    anger = emotions['anger']
+    disgust = emotions['disgust']
+    fear = emotions['fear']
+    joy = emotions['joy']
+    sadness = emotions['sadness']
 
-    # if not document_sentiment:
-    #     return {'label': None, 'score': None}
-
-    # return {
-    #     'label': document_sentiment.get('label'),
-    #     'score': document_sentiment.get('score')
-    # }
+    # Return required format
+    return {
+        'anger': anger,
+        'disgust': disgust,
+        'fear': fear,
+        'joy': joy,
+        'sadness': sadness,
+        'dominant_emotion': max(emotions, key=emotions.get)
+    }
     
